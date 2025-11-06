@@ -80,6 +80,16 @@ importers:
         specifier: workspace:*
         version: link:../typescript-config
 
+  packages/common:
+    dependencies:
+      zod:
+        specifier: ^4.1.12
+        version: 4.1.12
+    devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
+
   packages/eslint-config:
     devDependencies:
       '@eslint/js':
