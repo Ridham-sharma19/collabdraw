@@ -1,5 +1,5 @@
 {
-  "name": "http-backend",
+  "name": "http-server",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,14 +9,21 @@
     "start": "tsc -b && node dist/index.js"
   },
   "devDependencies": {
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "@types/jsonwebtoken": "^9.0.10"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
   "dependencies": {
-    "@types/express": "^5.0.5",
-    "express": "^5.1.0"
+    "@repo/backend-common": "workspace:*",
+    "@repo/common": "workspace:*",
+    "@repo/db": "workspace:*",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
   }
 }
