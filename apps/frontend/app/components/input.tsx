@@ -1,9 +1,20 @@
-
-
-export default function Input({type,placeholder}:{type:string,placeholder:string}) {
+export default function Input({
+  type,
+  placeholder,
+  onChange,
+}: {
+  type: string;
+  placeholder: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
   return (
     <div>
-        <input type={type} className="w-full px-4 py-2 rounded-2xl" placeholder={placeholder} />
+      <input
+        type={type}
+        className="w-full px-4 py-2 rounded-2xl"
+        placeholder={placeholder}
+        onChange={onChange}
+      />
     </div>
-  )
+  );
 }

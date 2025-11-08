@@ -8,9 +8,10 @@ import {
   CreateRoomSchema,
 } from "@repo/common/types";
 import { prismaClient } from "@repo/db/client";
+import cors from "cors"
 
 const app = express();
-
+app.use(cors())
 app.use(express.json());
 
 app.post("/signup", async (req, res) => {
@@ -29,8 +30,13 @@ app.post("/signup", async (req, res) => {
         password: parsedData.data?.password,
       },
     });
+    const token = jwt.sign(
+      { userId: user.id, email: user.email },
+      JWT_SECRET
+    );
     res.status(201).json({
-      userId: user.id,
+      message: "Signup successful",
+      token:token,
     });
   } catch (error) {
     res.status(411).json({
@@ -73,6 +79,28 @@ app.post("/signin", async (req, res) => {
     token,
   });
 });
+
+app.get("/validate-token", (req, res) => {
+  const authHeader = req.headers.authorization; 
+
+  if (!authHeader) {
+    return res.status(401).json({ valid: false, message: "Missing Authorization header" });
+  }
+
+  const token = authHeader.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ valid: false, message: "Missing token" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    return res.status(200).json({ valid: true, user: decoded });
+  } catch (err) {
+    return res.status(403).json({ valid: false, message: "Invalid or expired token" });
+  }
+});
+
+
 app.post("/room", middleware, async (req, res) => {
     const parsedData = CreateRoomSchema.safeParse(req.body);
     if (!parsedData.success) {
@@ -102,7 +130,7 @@ app.post("/room", middleware, async (req, res) => {
     }
 })
 
-app.get("/chats/:roomId", async (req, res) => {
+app.get("/chats/:roomId",middleware, async (req, res) => {
     try {
         const roomId = Number(req.params.roomId);
         console.log(req.params.roomId);
@@ -128,7 +156,7 @@ app.get("/chats/:roomId", async (req, res) => {
     
 })
 
-app.get("/room/:slug", async (req, res) => {
+app.get("/room/:slug",middleware, async (req, res) => {
     const slug = req.params.slug;
     const room = await prismaClient.room.findFirst({
         where: {

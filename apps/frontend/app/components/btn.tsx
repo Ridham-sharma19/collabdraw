@@ -18,7 +18,7 @@ export default function Button({
   const styles =
     variant === "primary"
       ? "bg-blue-500 text-white hover:bg-blue-800"
-      : "bg-gray-200 text-black hover:bg-gray-300";
+      : "bg-red-200 text-white hover:bg-red-300";
 
   return (
     <button className={`${base} ${styles}`} onClick={onClick}>
