@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Handshake } from "lucide-react";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +28,14 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="absolute top-4 left-4 z-50 opacity-90 cursor-pointer flex justify-center items-center">
+          <Handshake color="#ffff" /> <span className="text-blue-500 text-xl drop-shadow-[0_0_4px_rgba(59,130,246,0.5)] font-semibold">Collabdraw</span>
+        </div>
+
+       
+        <main className="w-screen h-screen overflow-hidden">
+          {children}
+        </main>
       </body>
     </html>
   );

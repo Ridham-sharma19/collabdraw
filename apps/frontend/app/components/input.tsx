@@ -11,7 +11,7 @@ export default function Input({
     <div>
       <input
         type={type}
-        className="w-full px-4 py-2 rounded-2xl"
+        className="w-full px-4 py-2 rounded-2xl border-black bg-neutral-500"
         placeholder={placeholder}
         onChange={onChange}
       />
