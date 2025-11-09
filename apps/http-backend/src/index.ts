@@ -130,6 +130,28 @@ app.post("/room", middleware, async (req, res) => {
     }
 })
 
+app.post("/room/join", middleware, async (req, res) => {
+  const parsedData = CreateRoomSchema.safeParse(req.body);
+  if (!parsedData.success) {
+    return res.status(400).json({ message: "Incorrect inputs" });
+  }
+
+  const slug = parsedData.data.name;
+
+  try {
+    const room = await prismaClient.room.findUnique({ where: { slug } });
+
+    if (!room) {
+      return res.status(404).json({ message: "Room not found" });
+    }
+    return res.json({ message: "Joined room successfully", roomId: room.id });
+  } catch (error) {
+    console.error("Error joining room:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 app.get("/chats/:roomId",middleware, async (req, res) => {
     try {
         const roomId = Number(req.params.roomId);

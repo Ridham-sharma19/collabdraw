@@ -2,6 +2,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import Box from "../createbox/box";
+import JoinBox from "../joinbox/box";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -51,6 +53,11 @@ export default function DashboardPage() {
     <div className="bg-black h-screen w-screen text-amber-100">
       <h1>Dashboard</h1>
       <p>Welcome to your dashboard!</p>
+      <div className="flex  gap-3">
+        <Box/>
+      <JoinBox/>
+      </div>
+      
     </div>
   );
 }

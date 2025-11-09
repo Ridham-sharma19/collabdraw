@@ -1,37 +1,47 @@
+
 import { useEffect, useRef, useState } from "react";
-import InitDraw from "../draw";
 import { IconButton } from "./btnIcons";
 import { Circle, Pencil, RectangleHorizontalIcon } from "lucide-react";
-
+import { Game } from "../draw/game";
 
 export type Tool = "circle" | "rect" | "pencil";
 
-export default function Canvas({roomId,socket}:{roomId:string,socket:WebSocket}) {
-
-
+export function Canvas({
+    roomId,
+    socket
+}: {
+    socket: WebSocket;
+    roomId: string;
+}) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
-     const [selectedTool, setSelectedTool] = useState<Tool>("circle")
-
+    const [game, setGame] = useState<Game>();
+    const [selectedTool, setSelectedTool] = useState<Tool>("circle")
 
     useEffect(() => {
-    if (canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
+        game?.setTool(selectedTool);
+    }, [selectedTool, game]);
 
-      if (!ctx) return;
-      InitDraw(canvasRef.current,roomId,socket)
-      
-    }
-  }, [canvasRef]);
-  return (
-    <div className="h-screen w-full overflow-hidden">
-      <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
-      <div className="fixed top-10 left-10">
-       <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
-      </div>
+    useEffect(() => {
+
+        if (canvasRef.current) {
+            const g = new Game(canvasRef.current, roomId, socket);
+            setGame(g);
+
+            return () => {
+                g.destroy();
+            }
+        }
+
+
+    }, [canvasRef]);
+
+    return <div style={{
+        height: "100vh",
+        overflow: "hidden"
+    }}>
+        <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+        <Topbar setSelectedTool={setSelectedTool} selectedTool={selectedTool} />
     </div>
-  )
 }
 
 function Topbar({selectedTool, setSelectedTool}: {
