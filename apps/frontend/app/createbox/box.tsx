@@ -4,10 +4,11 @@ import { useRouter } from "next/navigation";
 import Button from "../components/btn";
 import Input from "../components/input";
 import { createRoom } from "./handler";
+import RoomBox from "../components/box";
 
-export default function Box() {
+export default function CreateRoom() {
   const [roomName, setRoomName] = useState("");
-  const [loading, setLoading] = useState(false);
+ 
   const router = useRouter();
 
   const handleRoomCreation = async () => {
@@ -17,7 +18,7 @@ export default function Box() {
     }
 
     try {
-      setLoading(true);
+     
 
     
       const res = await createRoom({ name: roomName });
@@ -33,28 +34,11 @@ export default function Box() {
       console.error(" Error creating room:", err);
       alert("Failed to create room — maybe it already exists?");
     } finally {
-      setLoading(false);
+     
     }
   };
 
   return (
-    <div className="bg-neutral-800 text-white p-6 rounded-2xl shadow-md w-96 mx-auto mt-16 space-y-4">
-      <h2 className="text-xl font-semibold text-center">Create Room</h2>
-
-      <Input
-        type="text"
-        placeholder="Enter Room Name"
-        
-        onChange={(e) => setRoomName(e.target.value)}
-      />
-
-      <Button
-        variant="primary"
-        onClick={handleRoomCreation}
-        
-      >
-        {loading ? "Joining..." : "Join"}
-      </Button>
-    </div>
+    <RoomBox title="Create New Room" placeholder="create new Room" buttonText="create" onSubmit={handleRoomCreation} onChange={e=>setRoomName(e.target.value)}/>
   );
 }
