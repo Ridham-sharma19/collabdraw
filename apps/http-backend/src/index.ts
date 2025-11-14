@@ -9,6 +9,7 @@ import {
 } from "@repo/common/types";
 import { prismaClient } from "@repo/db/client";
 import cors from "cors"
+import bcrypt from "bcrypt"
 
 const app = express();
 app.use(cors())
@@ -22,12 +23,16 @@ app.post("/signup", async (req, res) => {
       message: "Incorrect Inputs",
     });
   }
+
+  const saltRounds = 10;
+ const hashedPassword = await bcrypt.hash(parsedData.data.password, saltRounds);
+ 
   try {
     const user = await prismaClient.user.create({
       data: {
         name: parsedData.data?.name,
         email: parsedData.data?.email,
-        password: parsedData.data?.password,
+        password: hashedPassword,
       },
     });
     const token = jwt.sign(
@@ -47,38 +52,38 @@ app.post("/signup", async (req, res) => {
 
 app.post("/signin", async (req, res) => {
   const parsedData = SigninSchema.safeParse(req.body);
+  
   if (!parsedData.success) {
-    res.json({
-      message: "Incorrect inputs",
-    });
-    return;
+    return res.json({ message: "Incorrect inputs" });
   }
 
   const user = await prismaClient.user.findFirst({
     where: {
       email: parsedData.data.email,
-      password: parsedData.data.password,
     },
   });
 
   if (!user) {
-    res.status(403).json({
-      message: "Not authorized",
-    });
-    return;
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
+  const isPasswordValid = await bcrypt.compare(
+    parsedData.data.password,
+    user.password
+  );
+
+  if (!isPasswordValid) {
+    return res.status(401).json({ message: "Incorrect password" });
   }
 
   const token = jwt.sign(
-    {
-      userId: user?.id,
-    },
+    { userId: user.id },
     JWT_SECRET!
   );
 
-  res.json({
-    token,
-  });
+  res.json({ token });
 });
+
 
 app.get("/validate-token", (req, res) => {
   const authHeader = req.headers.authorization; 

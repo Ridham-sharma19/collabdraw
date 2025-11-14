@@ -53,14 +53,14 @@ export default function DashboardPage() {
   return (
    <div className="min-h-screen w-full bg-gradient-to-b from-neutral-950 via-neutral-900 to-neutral-800 text-white flex justify-center items-center px-6 py-12 relative overflow-hidden">
       
-      {/* Decorative Background Glow */}
+ 
       <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-[40rem] h-[40rem] bg-blue-600/20 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[30rem] h-[30rem] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
     
      
 
-      {/* Main Content */}
+    
       <main className="flex flex-col md:flex-row gap-10 z-10">
         <CreateRoom />
         <JoinBox />
