@@ -10,10 +10,16 @@ import {
 import { prismaClient } from "@repo/db/client";
 import cors from "cors"
 import bcrypt from "bcrypt"
+import dotenv from "dotenv";
+dotenv.config();
+
 
 const app = express();
 app.use(cors())
 app.use(express.json());
+
+
+
 
 app.post("/signup", async (req, res) => {
   const parsedData = CreateUserSchema.safeParse(req.body);
@@ -37,7 +43,7 @@ app.post("/signup", async (req, res) => {
     });
     const token = jwt.sign(
       { userId: user.id, email: user.email },
-      JWT_SECRET
+      JWT_SECRET!
     );
     res.status(201).json({
       message: "Signup successful",
@@ -98,7 +104,7 @@ app.get("/validate-token", (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET!);
     return res.status(200).json({ valid: true, user: decoded });
   } catch (err) {
     return res.status(403).json({ valid: false, message: "Invalid or expired token" });
