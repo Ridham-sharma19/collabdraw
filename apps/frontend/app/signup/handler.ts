@@ -1,11 +1,12 @@
 
 
 import axios from "axios";
+import { BACKEND_HTTP } from "../config/config";
 
 
 export async function signUpHandler(username: string, email: string, password: string) {
   try {
-    const res = await axios.post("http://localhost:8000/signup", {
+    const res = await axios.post(`${BACKEND_HTTP}/signup`, {
       name: username,
       email,
       password,

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BACKEND_HTTP } from "../config/config";
 
 export async function getExistingShapes(roomId: string) {
   const token = localStorage.getItem("token"); // ✅ get token from browser storage
@@ -7,7 +8,7 @@ export async function getExistingShapes(roomId: string) {
     throw new Error("No token found. Please sign in again.");
   }
 
-  const res = await axios.get(`http://localhost:8000/chats/${roomId}`, {
+  const res = await axios.get(`${BACKEND_HTTP}/${roomId}`, {
     headers: {
       Authorization: `Bearer ${token}`, 
     },

@@ -1,11 +1,12 @@
 
 import axios from "axios";
+import { BACKEND_HTTP } from "../config/config";
 
 export async function joinRoom({ name }: { name: string }) {
   const token = localStorage.getItem("token");
 
   try {
-    const res = await axios.get(`http://localhost:8000/room/${name}`, {
+    const res = await axios.get(`${BACKEND_HTTP}/room/${name}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

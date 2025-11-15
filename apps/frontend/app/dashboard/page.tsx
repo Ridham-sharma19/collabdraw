@@ -5,6 +5,7 @@ import axios from "axios";
 
 import JoinBox from "../joinbox/box";
 import CreateRoom from "../createbox/box";
+import { BACKEND_HTTP } from "../config/config";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -23,7 +24,7 @@ export default function DashboardPage() {
     const verifyToken = async () => {
       try {
         
-        const res = await axios.get("http://localhost:8000/validate-token", {
+        const res = await axios.get(`${BACKEND_HTTP}/validate-token`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

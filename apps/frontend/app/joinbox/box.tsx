@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Button from "../components/btn";
-import Input from "../components/input";
+
 import { joinRoom } from "./handle";
 import RoomBox from "../components/box";
 

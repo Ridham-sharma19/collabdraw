@@ -2,12 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Canvas } from "./canvas";
+import { BACKEND_WS } from "../config/config";
 
 export function RoomCanvas({ roomId }: { roomId: string }) {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  // ✅ Access localStorage only on client side
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     if (!storedToken) {
@@ -17,11 +18,11 @@ export function RoomCanvas({ roomId }: { roomId: string }) {
     setToken(storedToken);
   }, []);
 
-  // ✅ Create socket only after token is available
+  
   useEffect(() => {
     if (!token) return;
 
-    const ws = new WebSocket(`ws://localhost:8001?token=${token}`);
+    const ws = new WebSocket(`${BACKEND_WS}?token=${token}`);
 
     ws.onopen = () => {
       console.log("Connected to WebSocket");
